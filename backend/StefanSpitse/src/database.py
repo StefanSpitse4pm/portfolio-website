@@ -1,7 +1,7 @@
 from typing import Any, AsyncGenerator
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncConnection
 from sqlalchemy import  (Insert, Select, Update)
-from .config import settings
+from config import settings
 
 engine = create_async_engine(settings.MYSQL_DATABASE_URI)
 
