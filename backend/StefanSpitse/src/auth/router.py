@@ -1,15 +1,18 @@
-from fastapi import APIRouter
-from starlette.responses import Response
+from fastapi import Depends, APIRouter
+from fastapi.security import OAuth2PasswordRequestForm 
+from auth.schemas import User 
+
 
 router = APIRouter()
-@router.get("/auth")
-async def get_auth():
+@router.post("/token")
+def get_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
     pass
 
-@router.post("/auth")
-async def post_auth():
+@router.get("/users/me")
+def get_current_users():
     pass
 
-
-
+@router.post("/users/create_user")
+def create_user(user: User):
+    pass
 

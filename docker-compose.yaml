@@ -1,0 +1,31 @@
+services:
+    database:
+      image: mysql:8.0
+      container_name: database
+      ports:
+        - "3306:3306"
+      environment:
+        MYSQL_ROOT_PASSWORD: ${MYSQL_DATABASE_PASSWORD:?Set MYSQL_DATABASE_PASSWORD in your environment}
+        MYSQL_DATABASE: ${MYSQL_DATABASE_NAME:-StefanSpitse}
+        MYSQL_USER: ${MYSQL_USER:-StefanSpitse}
+        MYSQL_PASSWORD: ${MYSQL_DATABASE_PASSWORD:?Set MYSQL_DATABASE_PASSWORD in your environment}
+    phpmyadmin:
+      image: phpmyadmin/phpmyadmin:latest
+      container_name: phpmyadmin
+      ports:
+        - "8080:80"
+      environment:
+        PMA_HOST: database 
+        PMA_PORT: 3306
+        PMA_USER: root 
+        PMA_PASSWORD: ${MYSQL_DATABASE_PASSWORD}
+    backend:
+      build:
+        context: ./backend/StefanSpitse
+        dockerfile: Dockerfile
+      ports:
+        - "7000:80"
+      volumes:
+        - ./backend/StefanSpitse/src/:/app/src
+      
+      
