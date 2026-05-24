@@ -34,5 +34,4 @@ async def create_user(user: User, db = Depends(get_db_connection)):
 
     await execute(insert(UserModel).values(username=user.username, hashed_password=hashed_password), db, commit=True) 
 
-    
 

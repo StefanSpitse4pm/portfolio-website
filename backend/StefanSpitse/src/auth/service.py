@@ -1,7 +1,6 @@
 from typing import Any
 from passlib.context import CryptContext
 from datetime import datetime, timedelta
-
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncConnection
 from fastapi.security import OAuth2PasswordBearer
@@ -39,5 +38,4 @@ async def authenticate_user(connection: AsyncConnection, username: str, password
     if not user or not await verify_password(password, user["hashed_password"]):
         return None
     return user
-
 
