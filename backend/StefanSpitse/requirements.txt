@@ -1,11 +1,11 @@
-fastapi
+fastapi[standard]
 sqlalchemy
 pydantic
 pandas
-uvicorn
 slowapi
 limits
 starlette
 asyncmy
+uvicorn
 python-jose
 dotenv
