@@ -4,12 +4,12 @@ from sqlalchemy.orm import DeclarativeBase, relationship
 class Base(DeclarativeBase):
     pass
     
-class ProjectModel(Base):
+class Projects(Base):
     __tablename__ = "projects" 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String)
     description = Column(String)
-    tags = relationship("Project_tags", back_populates="project_id", remote_side=[id])
+    tags = relationship("ProjectTags", back_populates="project_id_r")
     url = Column(String(255)) 
     date = Column(Date)
     article = Column(String(255), nullable=True) 
@@ -19,5 +19,5 @@ class ProjectTags(Base):
     id = Column(Integer, primary_key=True, index=True)
     tag = Column(String(30))
     project_id = Column(Integer, ForeignKey("projects.id"))
-    project_id = relationship("Projects", back_populates="tags", remote_side=[id])
+    project_id_r = relationship("Projects", back_populates="tags")
 
