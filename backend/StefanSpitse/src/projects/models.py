@@ -4,7 +4,7 @@ from sqlalchemy.orm import DeclarativeBase, relationship
 class Base(DeclarativeBase):
     pass
     
-class Projects(Base):
+class ProjectModel(Base):
     __tablename__ = "projects" 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String)
@@ -17,9 +17,7 @@ class Projects(Base):
 class ProjectTags(Base):
     __tablename__ = "project_tags" 
     id = Column(Integer, primary_key=True, index=True)
-    tags = Column(String)
+    tag = Column(String(30))
     project_id = Column(Integer, ForeignKey("projects.id"))
     project_id = relationship("Projects", back_populates="tags", remote_side=[id])
-
-
 
