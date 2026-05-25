@@ -5,7 +5,7 @@ from projects.models import Projects, ProjectTags
 from database import fetch_all, fetch_one, execute, get_db_connection
 from auth.dependencies import authenticate
 
-from sqlalchemy import Select, Delete, Insert
+from sqlalchemy import Select, Delete, Insert, Update
 
 router = APIRouter()
 
@@ -32,14 +32,23 @@ async def get_all_projects():
 
 @router.get("/projects/{project_id}")
 async def get_project(project_id: int):
-    project = await fetch_one(Select(Projects).where(Projects.id == project_id))
+    projects = await fetch_all(Select(Projects, ProjectTags.tag).where(Projects.id == project_id).join(ProjectTags, Projects.id == ProjectTags.project_id))
+
+    project = projects[0]
+    tags = [p["tag"] for p in projects]
+    project["tag"] = tags
+
     return project
+    
 
 @router.delete("/project/{project_id}")
-def delete_project(project_id: int):
-    pass
+async def delete_project(project_id: int, user = Depends(authenticate), db = Depends(get_db_connection)):
+    await execute(Delete(Projects).where(Projects.id == project_id), db, commit=True)
+
 
 @router.put("/project/{project_id}")
-def update_project(project_id: int):
-    pass
+async def update_project(project_id: int, project: Project, user = Depends(authenticate), db = Depends(get_db_connection) ):
+    query = Update(Projects).values(name=project.name,description=project.description,url=project.gh, date=project.date,article=project.article)
+    await execute(query, db, commit=True)
+
 
