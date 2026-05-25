@@ -3,6 +3,8 @@ import os
 import uuid
 import shutil
 from pathlib import Path
+
+from fastapi.responses import FileResponse
 from database import fetch_all, fetch_one, get_db_connection, execute
 from portfolio.service import does_category_exist
 
@@ -44,6 +46,11 @@ async def upload_pdf(pdf: UploadFile, category:str | None = None, user: TokenDat
 @router.get("/portfolio/files")
 async def get_all_files(user: TokenData = Depends(authenticate), db = Depends(get_db_connection)):
     return await fetch_all(Select(Files), db)
+
+@router.get("/portfolio/file/{file_id}")
+async def get_file(file_id: int):
+    file = await fetch_one(Select(Files).where(Files.id == file_id))
+    return FileResponse(file["file_path"], media_type="application/pdf", filename=file["file_name"])
 
 
 
