@@ -4,6 +4,7 @@ from sqlalchemy import Select, Insert, Delete
 
 from auth.dependencies import authenticate
 from blog.models import Articles
+from blog.schemas import Article
 from database import fetch_one, fetch_all, execute, get_db_connection
 
 from pathlib import Path
@@ -17,8 +18,8 @@ UPLOAD_DIR = Path("uploads/articles")
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 
 @router.post("/article", status_code=201)
-async def create_article(article: UploadFile, user = Depends(authenticate), db = Depends(get_db_connection)):
-    extension = os.path.splitext(str(article.filename))[1]
+async def create_article(file: UploadFile, article: Article, user = Depends(authenticate), db = Depends(get_db_connection)):
+    extension = os.path.splitext(str(file.filename))[1]
     if extension not in [".md"]:
         raise HTTPException(415)
 
@@ -26,16 +27,13 @@ async def create_article(article: UploadFile, user = Depends(authenticate), db =
     file_path = UPLOAD_DIR / f"{file_id}{extension}"
 
     with file_path.open("wb") as f:
-        shutil.copyfileobj(article.file, f)
+        shutil.copyfileobj(file.file, f)
     
-    await execute(Insert(Articles).values(), db, commit=True) 
+    await execute(Insert(Articles).values(title=article.title, slug= article.slug, cover_image), db, commit=True) 
 
-    file = await fetch_one(Select(Files).where(Files.file_path == file_path), db)
-    if category is not None:
-        c = await does_category_exist(category, db) 
-        await execute(Insert(FileCategories).values(category_id=c["id"], file_id=file["id"]), db, commit=True)
+    article_file = await fetch_one(Select(Articles).where(Articles.file_path == file_path), db)
 
-    return {"file_id": file["id"]}
+    return {"file_id": article_file["id"]}
 
 
 @router.get("/articles")
