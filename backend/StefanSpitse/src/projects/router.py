@@ -27,12 +27,12 @@ async def create_project(project: Project, user = Depends(authenticate), db = De
     return project
 
 @router.get("/projects")
-async def get_all_projects():
-    return await fetch_all(Select(Projects)) 
+async def get_all_projects(user = Depends(authenticate), db = Depends(get_db_connection)):
+    return await fetch_all(Select(Projects), db) 
 
 @router.get("/projects/{project_id}")
-async def get_project(project_id: int):
-    projects = await fetch_all(Select(Projects, ProjectTags.tag).where(Projects.id == project_id).join(ProjectTags, Projects.id == ProjectTags.project_id))
+async def get_project(project_id: int, user = Depends(authenticate), db = Depends(get_db_connection)):
+    projects = await fetch_all(Select(Projects, ProjectTags.tag).where(Projects.id == project_id).join(ProjectTags, Projects.id == ProjectTags.project_id), db)
 
     project = projects[0]
     tags = [p["tag"] for p in projects]
@@ -50,5 +50,9 @@ async def delete_project(project_id: int, user = Depends(authenticate), db = Dep
 async def update_project(project_id: int, project: Project, user = Depends(authenticate), db = Depends(get_db_connection) ):
     query = Update(Projects).values(name=project.name,description=project.description,url=project.gh, date=project.date,article=project.article)
     await execute(query, db, commit=True)
+
+    for tag in project.technologies:
+        await execute(Delete(ProjectTags).where(ProjectTags.project_id == project_id), db, commit=True)
+        await execute(Insert(ProjectTags).values(tag=tag, project_id=project_id), db, commit=True)
 
 
