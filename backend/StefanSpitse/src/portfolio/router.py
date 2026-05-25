@@ -52,5 +52,5 @@ async def get_file(file_id: int, user: TokenData = Depends(authenticate), db = D
 
 @router.delete("/portfolio/file/{file_id}")
 async def delete_file(file_id: int, user: TokenData = Depends(authenticate), db = Depends(get_db_connection)):
-    await execute(Delete(Files).where(Files.id == file_id), commit=True)
+    await execute(Delete(Files).where(Files.id == file_id), db, commit=True)
 
