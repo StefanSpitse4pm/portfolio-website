@@ -1,10 +1,11 @@
 from fastapi import Depends, APIRouter, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm 
-from auth.schemas import User 
+from auth.schemas import TokenData, User 
 from auth.service import authenticate_user, create_access_token, get_password_hash
 from database import get_db_connection, fetch_one, execute
 from sqlalchemy import select, insert
 from auth.models import UserModel
+from auth.dependencies import authenticate
 
 
 router = APIRouter()
@@ -21,8 +22,8 @@ async def get_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db 
     return {"access_token": access_token, "token_type": "bearer"}
 
 @router.get("/users/me")
-def get_current_users():
-    pass
+def get_current_users(user: TokenData = Depends(authenticate)) -> TokenData:
+    return user 
 
 @router.post("/users/create_user")
 async def create_user(user: User, db = Depends(get_db_connection)):
@@ -33,5 +34,4 @@ async def create_user(user: User, db = Depends(get_db_connection)):
 
     await execute(insert(UserModel).values(username=user.username, hashed_password=hashed_password), db, commit=True) 
 
-    
 

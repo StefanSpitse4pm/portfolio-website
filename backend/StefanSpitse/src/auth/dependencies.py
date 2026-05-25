@@ -6,7 +6,7 @@ from auth.schemas import TokenData
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
-def get_current_user(token: str = Depends(oauth2_scheme)):
+def authenticate(token: str = Depends(oauth2_scheme)):
     payload = verify_token(token)
     username: str | None = payload.get("sub")
     if username is None:
@@ -16,3 +16,4 @@ def get_current_user(token: str = Depends(oauth2_scheme)):
         )
     return TokenData(username=username)
 
+    

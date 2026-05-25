@@ -8,4 +8,5 @@ class Config:
     SECRET_KEY =  os.getenv('JWT_SECRET_KEY', "No JWT secret key found in .env with key JWT_SECRET_KEY")
     ALGORITHM = 'HS256'
     ACCESS_TOKEN_EXPIRE_TIME = 30
+
 settings = Config()
