@@ -18,7 +18,9 @@ import json
 router = APIRouter()
 
 UPLOAD_DIR = Path("uploads/articles")
+IMAGE_DIR = Path("uploads/images")
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
+IMAGE_DIR.mkdir(parents=True, exist_ok=True)
 
 @router.post("/article", status_code=201)
 async def create_article(file: UploadFile, article: Article = Depends(parse_article), user = Depends(authenticate), db = Depends(get_db_connection)):
@@ -98,5 +100,15 @@ async def delete_article(slug: str, user = Depends(authenticate), db = Depends(g
     
 
 @router.post("/upload-img", status_code=201)
-async def upload_image(image: UploadFile, user = Depends(authenticate), db = Depends(get_db_connection)):
-    pass
+async def upload_image(image: UploadFile, user = Depends(authenticate)):
+    extension = os.path.splitext(str(image.filename))[1]
+    if extension not in [".png", ".jpg", ".jpeg", ".gif"]:
+        raise HTTPException(415)
+
+    file_id = str(uuid.uuid4())
+    file_path = IMAGE_DIR / f"{file_id}{extension}"
+
+    with file_path.open("wb") as f:
+        shutil.copyfileobj(image.file, f)
+    return {"file_path": file_path}
+

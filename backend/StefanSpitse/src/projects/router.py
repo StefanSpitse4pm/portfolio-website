@@ -44,6 +44,10 @@ async def get_project(project_id: int, user = Depends(authenticate), db = Depend
 
 @router.delete("/project/{project_id}")
 async def delete_project(project_id: int, user = Depends(authenticate), db = Depends(get_db_connection)):
+    project = await fetch_one(Select(Projects).where(Projects.id == project_id), db)
+    if not project:
+        raise HTTPException(400, detail=f"id:{project_id} does not exist")
+    await execute(Delete(ProjectTags).where(ProjectTags.project_id == project_id), db, commit=True)
     await execute(Delete(Projects).where(Projects.id == project_id), db, commit=True)
 
 
