@@ -90,6 +90,12 @@ async def update_article(slug: str, file: UploadFile | None = None, article: Art
 
 @router.delete("/article/{slug}")
 async def delete_article(slug: str, user = Depends(authenticate), db = Depends(get_db_connection)):
+    exists = await fetch_all(Select(Articles).where(Articles.slug == slug), db)
+    if not exists:
+        raise HTTPException(400, detail=f"slug:{slug} does not exist")
+
+    await execute(Delete(Articles).where(Articles.slug == slug), db, commit=True)
+    
 
 @router.post("/upload-img", status_code=201)
 async def upload_image(image: UploadFile, user = Depends(authenticate), db = Depends(get_db_connection)):
