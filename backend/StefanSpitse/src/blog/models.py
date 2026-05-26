@@ -11,6 +11,7 @@ class Articles(Base):
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String)
     slug = Column(String)
+    file_name = Column(String)
     file_path = Column(String, unique=True, index=True)
     cover_image = Column(String)
     status = Column(String, default="draft")
