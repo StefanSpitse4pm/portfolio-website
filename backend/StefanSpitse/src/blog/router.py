@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, UploadFile, HTTPException 
 from fastapi.responses import FileResponse
 from starlette.responses import Response
-from sqlalchemy import Select, Insert, Delete
+from sqlalchemy import Select, Insert, Delete, Update
 
 from auth.dependencies import authenticate
 from blog.dependecies import parse_article
@@ -31,8 +31,9 @@ async def create_article(file: UploadFile, article: Article = Depends(parse_arti
 
     with file_path.open("wb") as f:
         shutil.copyfileobj(file.file, f)
+
     query = Insert(Articles).values(title=article.title,
-                                    slug=article.slug,
+                                    slug=article.slug_,
                                     file_path=file_path,
                                     file_name=file.filename,
                                     cover_image=article.cover_image,
@@ -53,14 +54,42 @@ async def get_articles(user = Depends(authenticate), db = Depends(get_db_connect
 @router.get("/article/{slug}")
 async def get_article(slug: str, user = Depends(authenticate), db = Depends(get_db_connection)):
     file = await fetch_one(Select(Articles).where(Articles.slug == slug), db)
+
+    if not file:
+        raise HTTPException(400, detail=f"id:{slug} does not exist")
     return FileResponse(file["file_path"], media_type="text/markdown", filename=file["file_name"])
 
-@router.patch("/article/{id}")
-async def update_article(id: int, user = Depends(authenticate), db = Depends(get_db_connection)):
+@router.patch("/article/{slug}")
+async def update_article(slug: str, file: UploadFile | None = None, article: Article | None = Depends(parse_article), user = Depends(authenticate), db = Depends(get_db_connection)):
+    exists = await fetch_one(Select(Articles).where(Articles.slug == slug), db)
+    if file is not None:
+        extension = os.path.splitext(str(file.filename))[1]
+        if extension not in [".md"]:
+            raise HTTPException(415)
 
-@router.delete("/article/{id}")
-async def delete_article(id: int, user = Depends(authenticate), db = Depends(get_db_connection)):
-    pass
+        file_id = str(uuid.uuid4())
+        file_path = UPLOAD_DIR / f"{file_id}{extension}"
+
+        with file_path.open("wb") as f:
+            shutil.copyfileobj(file.file, f)
+
+        await execute(Update(Articles).values(file_path=file_path,file_name=file.filename), db, commit=True)
+
+    if not exists:
+        raise HTTPException(400, detail=f"id:{slug} does not exist")
+    if article is not None:
+        await execute(Update(Articles).values(
+                                        title=article.title,
+                                        slug=article.slug_,
+                                        cover_image=article.cover_image,
+                                        status=article.status,
+                                        created_at=article.created_at,
+                                        published_at=article.published_at 
+                                    ), db, commit=True)
+    
+
+@router.delete("/article/{slug}")
+async def delete_article(slug: str, user = Depends(authenticate), db = Depends(get_db_connection)):
 
 @router.post("/upload-img", status_code=201)
 async def upload_image(image: UploadFile, user = Depends(authenticate), db = Depends(get_db_connection)):
