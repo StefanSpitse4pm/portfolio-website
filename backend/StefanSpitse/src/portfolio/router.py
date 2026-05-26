@@ -10,7 +10,6 @@ from portfolio.service import does_category_exist
 
 from auth.dependencies import authenticate
 from auth.schemas import TokenData
-from portfolio.schemas import File
 from portfolio.models import Files, Categories, FileCategories
 
 from sqlalchemy import Insert, Select, Delete

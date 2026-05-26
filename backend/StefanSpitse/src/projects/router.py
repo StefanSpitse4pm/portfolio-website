@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from starlette.responses import Response
 from projects.schemas import Project
 from projects.models import Projects, ProjectTags
@@ -33,7 +33,8 @@ async def get_all_projects(user = Depends(authenticate), db = Depends(get_db_con
 @router.get("/projects/{project_id}")
 async def get_project(project_id: int, user = Depends(authenticate), db = Depends(get_db_connection)):
     projects = await fetch_all(Select(Projects, ProjectTags.tag).where(Projects.id == project_id).join(ProjectTags, Projects.id == ProjectTags.project_id), db)
-
+    if not projects:
+        raise HTTPException(400, detail=f"id:{project_id} does not exist")
     project = projects[0]
     tags = [p["tag"] for p in projects]
     project["tag"] = tags
@@ -43,6 +44,10 @@ async def get_project(project_id: int, user = Depends(authenticate), db = Depend
 
 @router.delete("/project/{project_id}")
 async def delete_project(project_id: int, user = Depends(authenticate), db = Depends(get_db_connection)):
+    project = await fetch_one(Select(Projects).where(Projects.id == project_id), db)
+    if not project:
+        raise HTTPException(400, detail=f"id:{project_id} does not exist")
+    await execute(Delete(ProjectTags).where(ProjectTags.project_id == project_id), db, commit=True)
     await execute(Delete(Projects).where(Projects.id == project_id), db, commit=True)
 
 
