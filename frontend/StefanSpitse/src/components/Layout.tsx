@@ -16,6 +16,9 @@ const Layout = () => {
           <span className="brand-name">Stefan Spitse</span>
         </Link>
         <nav className="nav-links">
+          <NavLink to="/about" className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}>
+            About
+          </NavLink>
           <NavLink to="/projects" className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}>
             Projects
           </NavLink>

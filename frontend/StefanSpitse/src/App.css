@@ -234,7 +234,28 @@
 .toolbar {
   display: flex;
   align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.toggle-group {
+  display: flex;
+  flex-wrap: wrap;
   gap: 12px;
+}
+
+.button.toggle {
+  border-color: var(--line);
+  background: transparent;
+  color: var(--muted);
+  box-shadow: none;
+}
+
+.button.toggle.active {
+  background: var(--accent);
+  color: #fff8e8;
+  border-color: transparent;
+  box-shadow: var(--shadow-soft);
 }
 
 .callout {
@@ -332,6 +353,10 @@
 .stack {
   display: grid;
   gap: 24px;
+}
+
+.portfolio-gate {
+  max-width: 420px;
 }
 
 .markdown {
