@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { BLOG_ENABLED } from '../libs/features'
 
 const Home = () => {
   const homeRef = useRef<HTMLDivElement | null>(null)
@@ -64,19 +65,18 @@ const Home = () => {
         <div className="hero-content">
           <p className="hero-eyebrow">Stefan Spitse</p>
           <h1 className="hero-title">
-            A Backend engineer building high-clarity products with a focus on systems, detail, and
+            A backend engineer building high-clarity products with a focus on systems, detail, and
             impact.
           </h1>
-          <p className="hero-subtitle">
-            A curated collection of projects, portfolio work, and technical notes.
-          </p>
           <div className="hero-actions">
             <Link to="/projects" className="button primary">
-              Enter the work
+              My Projects
             </Link>
-            <Link to="/blog" className="button text">
-              Read the blog
-            </Link>
+            {BLOG_ENABLED ? (
+              <Link to="/blog" className="button text">
+                Read my blog
+              </Link>
+            ) : null}
           </div>
         </div>
       </section>

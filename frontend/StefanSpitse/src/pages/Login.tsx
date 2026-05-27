@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { useAuth } from '../lib/auth'
+import { useAuth } from '../libs/auth'
 
 const Login = () => {
   const { token, login } = useAuth()

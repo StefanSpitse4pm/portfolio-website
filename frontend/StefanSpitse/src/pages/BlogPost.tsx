@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
-import { apiUrl, getArticleMarkdown } from '../lib/api'
-import { useAuth } from '../lib/auth'
+import { apiUrl, getArticleMarkdown } from '../libs/api'
+import { useAuth } from '../libs/auth'
 
 const BlogPost = () => {
   const { slug } = useParams()

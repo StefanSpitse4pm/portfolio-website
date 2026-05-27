@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
-import { ApiError, downloadPortfolioFile, getPortfolioFiles, login } from '../lib/api'
-import type { PortfolioFile } from '../lib/types'
-import { useAuth } from '../lib/auth'
+import { ApiError, downloadPortfolioFile, getPortfolioFiles, login } from '../libs/api'
+import type { PortfolioFile } from '../libs/types'
+import { useAuth } from '../libs/auth'
 
 const PORTFOLIO_STORAGE_KEY = 'stefan-portfolio-access'
 const PORTFOLIO_USERNAME = import.meta.env.VITE_PORTFOLIO_USERNAME ?? 'portfolio'
@@ -129,7 +129,7 @@ const Portfolio = () => {
     <section className="section">
       <header className="section-header">
         <h2>Portfolio</h2>
-        <p className="muted">PDF work samples, decks, and documentation.</p>
+        <p className="muted">Files for school.</p>
       </header>
 
       {!accessToken ? (

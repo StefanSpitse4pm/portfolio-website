@@ -10,6 +10,7 @@ import BlogPost from './pages/BlogPost'
 import Login from './pages/Login'
 import Admin from './pages/Admin'
 import NotFound from './pages/NotFound'
+import { BLOG_ENABLED } from './libs/features'
 
 function App() {
   return (
@@ -18,8 +19,8 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/projects" element={<Projects />} />
         <Route path="/portfolio" element={<Portfolio />} />
-        <Route path="/blog" element={<Blog />} />
-        <Route path="/blog/:slug" element={<BlogPost />} />
+        {BLOG_ENABLED ? <Route path="/blog" element={<Blog />} /> : null}
+        {BLOG_ENABLED ? <Route path="/blog/:slug" element={<BlogPost />} /> : null}
         <Route path="/login" element={<Login />} />
         <Route
           path="/admin"
