@@ -27,11 +27,11 @@ async def create_project(project: Project, user = Depends(authenticate), db = De
     return project
 
 @router.get("/projects")
-async def get_all_projects(user = Depends(authenticate), db = Depends(get_db_connection)):
+async def get_all_projects(db = Depends(get_db_connection)):
     return await fetch_all(Select(Projects), db) 
 
 @router.get("/projects/{project_id}")
-async def get_project(project_id: int, user = Depends(authenticate), db = Depends(get_db_connection)):
+async def get_project(project_id: int, db = Depends(get_db_connection)):
     projects = await fetch_all(Select(Projects, ProjectTags.tag).where(Projects.id == project_id).join(ProjectTags, Projects.id == ProjectTags.project_id), db)
     if not projects:
         raise HTTPException(400, detail=f"id:{project_id} does not exist")

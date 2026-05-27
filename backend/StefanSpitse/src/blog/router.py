@@ -50,11 +50,11 @@ async def create_article(file: UploadFile, article: Article = Depends(parse_arti
 
 
 @router.get("/articles")
-async def get_articles(user = Depends(authenticate), db = Depends(get_db_connection)):
+async def get_articles(db = Depends(get_db_connection)):
     return await fetch_all(Select(Articles), db)
 
 @router.get("/article/{slug}")
-async def get_article(slug: str, user = Depends(authenticate), db = Depends(get_db_connection)):
+async def get_article(slug: str, db = Depends(get_db_connection)):
     file = await fetch_one(Select(Articles).where(Articles.slug == slug), db)
 
     if not file:
