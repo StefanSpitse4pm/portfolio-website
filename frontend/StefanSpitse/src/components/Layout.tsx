@@ -16,9 +16,6 @@ const Layout = () => {
           <span className="brand-name">Stefan Spitse</span>
         </Link>
         <nav className="nav-links">
-          <NavLink to="/about" className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}>
-            About
-          </NavLink>
           <NavLink to="/projects" className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}>
             Projects
           </NavLink>
@@ -52,8 +49,8 @@ const Layout = () => {
       </main>
       {!isHome ? (
         <footer className="site-footer">
-          <span>Available for new projects and collaborations.</span>
-          <span>Based in Belgium.</span>
+          <span>Currently looking for internship</span>
+          <span>Based in Emmen</span>
         </footer>
       ) : null}
     </div>
