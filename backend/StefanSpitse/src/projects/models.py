@@ -6,8 +6,8 @@ from database import Base
 class Projects(Base):
     __tablename__ = "projects" 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String)
-    description = Column(String)
+    name = Column(String(255))
+    description = Column(String(255))
     tags = relationship("ProjectTags", back_populates="project_id_r")
     url = Column(String(255)) 
     date = Column(Date)

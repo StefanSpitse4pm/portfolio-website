@@ -30,6 +30,7 @@ class Config:
     load_dotenv(override=True)
 
     MYSQL_DATABASE_URI = os.getenv("MYSQL_DATABASE_URI") or _build_mysql_uri()
+    ALEMBIC_URI = os.getenv("ALEMBIC_URI", "")
     MYSQL_DATABASE_NAME = os.getenv("MYSQL_DATABASE_NAME", "")
     SECRET_KEY = os.getenv("JWT_SECRET_KEY", "")
     ALGORITHM = "HS256"
