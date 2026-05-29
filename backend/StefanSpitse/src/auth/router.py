@@ -26,7 +26,7 @@ def get_current_users(user: TokenData = Depends(authenticate)) -> TokenData:
     return user 
 
 @router.post("/users/create_user")
-async def create_user(user: User, db = Depends(get_db_connection)):
+async def create_user(user: User, login: TokenData = Depends(authenticate), db = Depends(get_db_connection)):
     existing = await fetch_one(select(UserModel).where(UserModel.username == user.username), db)
     if existing:
         raise HTTPException(status_code=409, detail="Already exists")

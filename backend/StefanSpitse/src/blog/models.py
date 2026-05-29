@@ -1,10 +1,9 @@
 from sqlalchemy import Column, ForeignKey, Integer, String, DateTime
-from sqlalchemy.orm import DeclarativeBase, relationship
+from sqlalchemy.orm import relationship
+from database import Base
 
 from datetime import datetime
 
-class Base(DeclarativeBase):
-    pass
 
 class Articles(Base):
     __tablename__ = "articles"

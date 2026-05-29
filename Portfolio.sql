@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: database:3306
--- Generation Time: May 27, 2026 at 07:44 PM
+-- Generation Time: May 27, 2026 at 11:05 PM
 -- Server version: 8.0.46
 -- PHP Version: 8.3.26
 
@@ -60,7 +60,7 @@ CREATE TABLE `categories` (
 CREATE TABLE `files` (
   `id` int NOT NULL,
   `file_path` varchar(512) NOT NULL,
-  `file_name` int NOT NULL
+  `file_name` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -85,7 +85,7 @@ CREATE TABLE `projects` (
   `id` int NOT NULL,
   `name` varchar(255) NOT NULL,
   `description` text NOT NULL,
-  `url` int NOT NULL,
+  `url` varchar(255) NOT NULL,
   `date` date NOT NULL,
   `article` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -119,7 +119,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `hashed_password`) VALUES
-(1, 'string', '$2b$12$N4R3JH1HHDnc5yh65NvB0utFOj9pVe.zMAqE.QeZtGhU1tHRNvbAG');
+(2, 'Portfolio', '$2b$12$m.iTFG0UHBE0PcTH7UeROequP0ZP3w0f9fyDKquQdhJTdJ9xJQnAy'),
+(3, 'Admin', '$2b$12$9ww3Eiw73d.Vku/gW0PVUuIG9m5GrD2uiQcIIW/vqYoSsDvjqNNKy');
 
 --
 -- Indexes for dumped tables
@@ -214,7 +215,7 @@ ALTER TABLE `project_tags`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Constraints for dumped tables

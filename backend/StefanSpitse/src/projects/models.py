@@ -1,8 +1,7 @@
 from sqlalchemy import Column, ForeignKey, Integer, String, Date
-from sqlalchemy.orm import DeclarativeBase, relationship
+from sqlalchemy.orm import relationship
 
-class Base(DeclarativeBase):
-    pass
+from database import Base
     
 class Projects(Base):
     __tablename__ = "projects" 

@@ -6,9 +6,11 @@ services:
         - "3306:3306"
       environment:
         MYSQL_ROOT_PASSWORD: ${MYSQL_DATABASE_PASSWORD:?Set MYSQL_DATABASE_PASSWORD in your environment}
-        MYSQL_DATABASE: ${MYSQL_DATABASE_NAME:-StefanSpitse}
+        MYSQL_DATABASE: ${MYSQL_DATABASE_NAME:-Portfolio}
         MYSQL_USER: ${MYSQL_USER:-StefanSpitse}
         MYSQL_PASSWORD: ${MYSQL_DATABASE_PASSWORD:?Set MYSQL_DATABASE_PASSWORD in your environment}
+      volumes:
+        - ./Portfolio.sql:/docker-entrypoint-initdb.d/Portfolio.sql:ro
     phpmyadmin:
       image: phpmyadmin/phpmyadmin:latest
       container_name: phpmyadmin
@@ -24,8 +26,24 @@ services:
         context: ./backend/StefanSpitse
         dockerfile: Dockerfile
       ports:
-        - "7000:80"
+        - "8000:80"
+      environment:
+        MYSQL_DATABASE_NAME: ${MYSQL_DATABASE_NAME:-StefanSpitse}
+        MYSQL_USER: ${MYSQL_USER:-StefanSpitse}
+        MYSQL_DATABASE_PASSWORD: ${MYSQL_DATABASE_PASSWORD:?Set MYSQL_DATABASE_PASSWORD in your environment}
+        MYSQL_DATABASE_HOST: database
+        MYSQL_DATABASE_PORT: 3306
       volumes:
         - ./backend/StefanSpitse/src/:/app/src
+    frontend:
+      build:
+        context: ./frontend/StefanSpitse
+        dockerfile: Dockerfile
+      ports:
+        - "5173:5173"
+      environment:
+        VITE_API_URL: http://localhost:8000
+      volumes:
+        - ./frontend/StefanSpitse:/app
       
       
