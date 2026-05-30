@@ -5,4 +5,4 @@ RUN pip install --no-cache-dir --upgrade -r requirements.txt
 ENV PATH="/usr/local/bin:$PATH"
 COPY ./src /app/src
 WORKDIR /app/src
-CMD ["sh", "-c", "alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port 8000"]
+CMD ["sh", "-c", "alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port 80"]

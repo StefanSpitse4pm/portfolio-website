@@ -7,6 +7,13 @@ services:
       MYSQL_DATABASE: ${MYSQL_DATABASE_NAME:-Portfolio}
       MYSQL_USER: ${MYSQL_USER:-StefanSpitse}
       MYSQL_PASSWORD: ${MYSQL_DATABASE_PASSWORD:?Set MYSQL_DATABASE_PASSWORD in your environment}
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_DATABASE_PASSWORD}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
     volumes:
       - db_data:/var/lib/mysql
     networks:
@@ -25,7 +32,7 @@ services:
       PMA_USER: root
       PMA_PASSWORD: ${MYSQL_DATABASE_PASSWORD}
     networks:
-      - internal        # ✅ added
+      - internal        
 
   backend:
     build:
@@ -34,22 +41,26 @@ services:
     ports:
       - "8000:80"
     environment:
+      ALEMBIC_URI: ${ALEMBIC_URI}
+      MYSQL_DATABASE_URI: ${MYSQL_DATABASE_URI}
       MYSQL_DATABASE_NAME: ${MYSQL_DATABASE_NAME:-Portfolio}
       MYSQL_USER: ${MYSQL_USER:-StefanSpitse}
       MYSQL_DATABASE_PASSWORD: ${MYSQL_DATABASE_PASSWORD:?Set MYSQL_DATABASE_PASSWORD in your environment}
       MYSQL_DATABASE_HOST: database
       MYSQL_DATABASE_PORT: 3306
-    depends_on:         # ✅ fixed indentation
-      - database
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY} 
+    depends_on:
+      database:
+        condition: service_healthy
     networks:
-      - internal        # ✅ added
+      - internal        
 
   frontend:
     build:
       context: ./frontend/StefanSpitse
       dockerfile: Dockerfile
       args:
-        VITE_API_URL: http://YOUR_SERVER_IP:8000   
+        VITE_API_URL: http://192.168.2.9:8000   
     ports:
       - "80:80"         
     networks:
