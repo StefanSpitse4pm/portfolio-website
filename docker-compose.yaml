@@ -2,6 +2,8 @@ services:
   database:
     image: mysql:8.0
     container_name: database
+    ports:
+      - 3306:3306
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_DATABASE_PASSWORD:?Set MYSQL_DATABASE_PASSWORD in your environment}
       MYSQL_DATABASE: ${MYSQL_DATABASE_NAME:-Portfolio}
