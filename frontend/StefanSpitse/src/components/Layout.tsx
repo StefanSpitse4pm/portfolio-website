@@ -1,5 +1,6 @@
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
-import { useAuth } from '../lib/auth'
+import { useAuth } from '../libs/auth'
+import { BLOG_ENABLED } from '../libs/features'
 
 const Layout = () => {
   const location = useLocation()
@@ -22,9 +23,11 @@ const Layout = () => {
           <NavLink to="/portfolio" className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}>
             Portfolio
           </NavLink>
-          <NavLink to="/blog" className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}>
-            Blog
-          </NavLink>
+          {BLOG_ENABLED ? (
+            <NavLink to="/blog" className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}>
+              Blog
+            </NavLink>
+          ) : null}
         </nav>
         <div className="nav-actions">
           {token ? (
@@ -49,8 +52,8 @@ const Layout = () => {
       </main>
       {!isHome ? (
         <footer className="site-footer">
-          <span>Available for new projects and collaborations.</span>
-          <span>Based in Belgium.</span>
+          <span>Currently looking for internship</span>
+          <span>Based in Emmen, Netherlands</span>
         </footer>
       ) : null}
     </div>

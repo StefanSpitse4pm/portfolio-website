@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { createArticle, createProject, uploadImage, uploadPortfolioFile } from '../lib/api'
-import { useAuth } from '../lib/auth'
+import { createArticle, createProject, uploadImage, uploadPortfolioFile } from '../libs/api'
+import { useAuth } from '../libs/auth'
+import { BLOG_ENABLED } from '../libs/features'
 
 const Admin = () => {
   const { token } = useAuth()
@@ -174,7 +175,7 @@ const Admin = () => {
     <section className="section">
       <header className="section-header">
         <h2>Admin</h2>
-        <p className="muted">Manage projects, portfolio files, and blog posts.</p>
+        <p className="muted">Manage projects and portfolio files.</p>
       </header>
 
       <div className="stack">
@@ -290,117 +291,121 @@ const Admin = () => {
           </button>
         </form>
 
-        <form className="form card" onSubmit={handleArticleSubmit}>
-          <h3>Upload blog article</h3>
-          <label className="field">
-            <span>Title</span>
-            <input
-              type="text"
-              value={articleForm.title}
-              onChange={(event) =>
-                setArticleForm({ ...articleForm, title: event.target.value })
-              }
-              required
-            />
-          </label>
-          <label className="field">
-            <span>Slug</span>
-            <input
-              type="text"
-              value={articleForm.slug}
-              onChange={(event) =>
-                setArticleForm({ ...articleForm, slug: event.target.value })
-              }
-              required
-            />
-          </label>
-          <label className="field">
-            <span>Cover image URL</span>
-            <input
-              type="text"
-              value={articleForm.coverImage}
-              onChange={(event) =>
-                setArticleForm({
-                  ...articleForm,
-                  coverImage: event.target.value,
-                })
-              }
-              required
-            />
-          </label>
-          <label className="field">
-            <span>Status</span>
-            <select
-              value={articleForm.status}
-              onChange={(event) =>
-                setArticleForm({ ...articleForm, status: event.target.value })
-              }
-            >
-              <option value="draft">Draft</option>
-              <option value="published">Published</option>
-            </select>
-          </label>
-          <label className="field">
-            <span>Created at</span>
-            <input
-              type="datetime-local"
-              value={articleForm.createdAt}
-              onChange={(event) =>
-                setArticleForm({
-                  ...articleForm,
-                  createdAt: event.target.value,
-                })
-              }
-            />
-          </label>
-          <label className="field">
-            <span>Published at</span>
-            <input
-              type="datetime-local"
-              value={articleForm.publishedAt}
-              onChange={(event) =>
-                setArticleForm({
-                  ...articleForm,
-                  publishedAt: event.target.value,
-                })
-              }
-            />
-          </label>
-          <label className="field">
-            <span>Markdown file</span>
-            <input
-              type="file"
-              accept="text/markdown,.md"
-              onChange={(event) =>
-                setArticleForm({
-                  ...articleForm,
-                  file: event.target.files?.[0] ?? null,
-                })
-              }
-              required
-            />
-          </label>
-          {articleMessage ? <p className="muted">{articleMessage}</p> : null}
-          <button type="submit" className="button primary">
-            Upload article
-          </button>
-        </form>
+        {BLOG_ENABLED ? (
+          <>
+            <form className="form card" onSubmit={handleArticleSubmit}>
+              <h3>Upload blog article</h3>
+              <label className="field">
+                <span>Title</span>
+                <input
+                  type="text"
+                  value={articleForm.title}
+                  onChange={(event) =>
+                    setArticleForm({ ...articleForm, title: event.target.value })
+                  }
+                  required
+                />
+              </label>
+              <label className="field">
+                <span>Slug</span>
+                <input
+                  type="text"
+                  value={articleForm.slug}
+                  onChange={(event) =>
+                    setArticleForm({ ...articleForm, slug: event.target.value })
+                  }
+                  required
+                />
+              </label>
+              <label className="field">
+                <span>Cover image URL</span>
+                <input
+                  type="text"
+                  value={articleForm.coverImage}
+                  onChange={(event) =>
+                    setArticleForm({
+                      ...articleForm,
+                      coverImage: event.target.value,
+                    })
+                  }
+                  required
+                />
+              </label>
+              <label className="field">
+                <span>Status</span>
+                <select
+                  value={articleForm.status}
+                  onChange={(event) =>
+                    setArticleForm({ ...articleForm, status: event.target.value })
+                  }
+                >
+                  <option value="draft">Draft</option>
+                  <option value="published">Published</option>
+                </select>
+              </label>
+              <label className="field">
+                <span>Created at</span>
+                <input
+                  type="datetime-local"
+                  value={articleForm.createdAt}
+                  onChange={(event) =>
+                    setArticleForm({
+                      ...articleForm,
+                      createdAt: event.target.value,
+                    })
+                  }
+                />
+              </label>
+              <label className="field">
+                <span>Published at</span>
+                <input
+                  type="datetime-local"
+                  value={articleForm.publishedAt}
+                  onChange={(event) =>
+                    setArticleForm({
+                      ...articleForm,
+                      publishedAt: event.target.value,
+                    })
+                  }
+                />
+              </label>
+              <label className="field">
+                <span>Markdown file</span>
+                <input
+                  type="file"
+                  accept="text/markdown,.md"
+                  onChange={(event) =>
+                    setArticleForm({
+                      ...articleForm,
+                      file: event.target.files?.[0] ?? null,
+                    })
+                  }
+                  required
+                />
+              </label>
+              {articleMessage ? <p className="muted">{articleMessage}</p> : null}
+              <button type="submit" className="button primary">
+                Upload article
+              </button>
+            </form>
 
-        <form className="form card" onSubmit={handleImageUpload}>
-          <h3>Upload blog image</h3>
-          <label className="field">
-            <span>Image file</span>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(event) => setImageFile(event.target.files?.[0] ?? null)}
-            />
-          </label>
-          {imageMessage ? <p className="muted">{imageMessage}</p> : null}
-          <button type="submit" className="button primary">
-            Upload image
-          </button>
-        </form>
+            <form className="form card" onSubmit={handleImageUpload}>
+              <h3>Upload blog image</h3>
+              <label className="field">
+                <span>Image file</span>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(event) => setImageFile(event.target.files?.[0] ?? null)}
+                />
+              </label>
+              {imageMessage ? <p className="muted">{imageMessage}</p> : null}
+              <button type="submit" className="button primary">
+                Upload image
+              </button>
+            </form>
+          </>
+        ) : null}
       </div>
     </section>
   )

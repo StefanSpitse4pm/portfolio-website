@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
-import { getProjects } from '../lib/api'
-import type { Project } from '../lib/types'
-import { useAuth } from '../lib/auth'
+import { getProjects } from '../libs/api'
+import type { Project } from '../libs/types'
+import { useAuth } from '../libs/auth'
 
 const Projects = () => {
   const { token } = useAuth()

@@ -102,6 +102,33 @@
   overflow: hidden;
 }
 
+.home {
+  position: relative;
+  isolation: isolate;
+}
+
+.cursor-orb {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0.7;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(15, 118, 110, 0.4), transparent 60%),
+    radial-gradient(circle at 70% 70%, rgba(245, 158, 11, 0.35), transparent 65%);
+  transform: translate3d(
+    calc(var(--cursor-x, 50vw) - 50%),
+    calc(var(--cursor-y, 40vh) - 50%),
+    0
+  );
+  transition: opacity 0.6s ease;
+  mix-blend-mode: multiply;
+  z-index: 99;
+}
+
 .hero-visual {
   position: absolute;
   inset: -30vmin;
@@ -146,6 +173,129 @@
   display: flex;
   gap: 16px;
   align-items: center;
+}
+
+.about-section {
+  margin-top: 60px;
+  padding: 36px;
+  border-radius: 32px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.65);
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(8px);
+}
+
+.about-header {
+  gap: 12px;
+}
+
+.about-eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.28em;
+  font-size: 12px;
+  color: var(--muted);
+  margin: 0;
+}
+
+.about-grid {
+  align-items: stretch;
+}
+
+.about-lead {
+  border: 1px solid rgba(15, 118, 110, 0.25);
+  box-shadow: var(--shadow);
+}
+
+.about-role {
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 12px;
+  color: var(--muted);
+  margin: 0;
+}
+
+.highlight {
+  color: var(--accent-strong);
+  font-weight: 600;
+}
+
+.skill-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.skill-list li {
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(15, 118, 110, 0.3);
+  background: rgba(15, 118, 110, 0.1);
+  color: var(--text);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.contact-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.contact-list a {
+  color: var(--text);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s ease;
+}
+
+.contact-list a:hover {
+  border-bottom-color: var(--text);
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-grid .card,
+.reveal-block {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.reveal.is-visible .reveal-grid .card,
+.reveal.is-visible .reveal-block {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal.is-visible .reveal-grid .card:nth-child(1) {
+  transition-delay: 0.05s;
+}
+
+.reveal.is-visible .reveal-grid .card:nth-child(2) {
+  transition-delay: 0.12s;
+}
+
+.reveal.is-visible .reveal-grid .card:nth-child(3) {
+  transition-delay: 0.2s;
+}
+
+.reveal.is-visible .reveal-block {
+  transition-delay: 0.28s;
 }
 
 .section {
@@ -234,7 +384,28 @@
 .toolbar {
   display: flex;
   align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.toggle-group {
+  display: flex;
+  flex-wrap: wrap;
   gap: 12px;
+}
+
+.button.toggle {
+  border-color: var(--line);
+  background: transparent;
+  color: var(--muted);
+  box-shadow: none;
+}
+
+.button.toggle.active {
+  background: var(--accent);
+  color: #fff8e8;
+  border-color: transparent;
+  box-shadow: var(--shadow-soft);
 }
 
 .callout {
@@ -334,6 +505,12 @@
   gap: 24px;
 }
 
+.portfolio-gate {
+  max-width: 420px;
+  width: 100%;
+  margin: 0 auto;
+}
+
 .markdown {
   background: var(--surface);
   padding: 30px;
@@ -402,6 +579,10 @@
     align-items: flex-start;
   }
 
+  .about-section {
+    padding: 24px;
+  }
+
   .list-item {
     flex-direction: column;
     align-items: flex-start;
@@ -420,5 +601,24 @@
 
   .button {
     transition: none;
+  }
+
+  .reveal,
+  .reveal-grid .card,
+  .reveal-block {
+    transition: none;
+    transform: none;
+    opacity: 1;
+  }
+
+  .cursor-orb {
+    transition: none;
+    opacity: 0.35;
+  }
+}
+
+@media (pointer: coarse) {
+  .cursor-orb {
+    display: none;
   }
 }

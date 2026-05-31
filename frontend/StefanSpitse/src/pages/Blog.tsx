@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { getArticles } from '../lib/api'
-import type { Article } from '../lib/types'
-import { useAuth } from '../lib/auth'
+import { getArticles } from '../libs/api'
+import type { Article } from '../libs/types'
+import { useAuth } from '../libs/auth'
 
 const Blog = () => {
   const { token } = useAuth()
@@ -42,7 +42,6 @@ const Blog = () => {
     <section className="section">
       <header className="section-header">
         <h2>Blog</h2>
-        <p className="muted">Notes on engineering, process, and exploration.</p>
       </header>
 
       {isLoading ? <p className="muted">Loading articles...</p> : null}

@@ -9,3 +9,7 @@ asyncmy
 uvicorn
 python-jose
 dotenv
+cryptography
+passlib
+alembic
+pymysql
