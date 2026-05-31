@@ -1,9 +1,13 @@
 from typing import Any, AsyncGenerator
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncConnection
-from sqlalchemy import  (Insert, Select, Update)
-from .config import settings
+from sqlalchemy import  (Insert, Select, Update, Delete)
+from sqlalchemy.orm import DeclarativeBase
+from config import settings
 
 engine = create_async_engine(settings.MYSQL_DATABASE_URI)
+
+class Base(DeclarativeBase):
+    pass
 
 async def fetch_one(query: Insert | Select | Update, connection: AsyncConnection | None = None, commit: bool = False) -> dict[str, Any]:
     if connection is None:
@@ -25,7 +29,7 @@ async def fetch_all(query: Insert | Select | Update, connection: AsyncConnection
     return [r._asdict() for r in cursor.all()]
 
 
-async def execute(query: Insert | Update, connection: AsyncConnection | None = None, commit: bool = False) -> None:
+async def execute(query: Insert | Update | Delete, connection: AsyncConnection | None = None, commit: bool = False) -> None:
     if connection is None:
         async with engine.connect() as connection:
             await _execute_query(query, connection, commit)
@@ -33,7 +37,7 @@ async def execute(query: Insert | Update, connection: AsyncConnection | None = N
     await _execute_query(query, connection, commit)
 
 
-async def _execute_query(query: Insert | Select | Update, connection: AsyncConnection, commit: bool):
+async def _execute_query(query: Insert | Select | Update | Delete, connection: AsyncConnection, commit: bool):
     result = await connection.execute(query)
     if commit:
         await connection.commit()

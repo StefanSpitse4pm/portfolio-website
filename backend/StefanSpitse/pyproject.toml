@@ -4,4 +4,10 @@ version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "alembic>=1.18.4",
+    "cryptography>=48.0.0",
+    "passlib>=1.7.4",
+    "pymysql>=1.2.0",
+    "python-multipart>=0.0.29",
+]
