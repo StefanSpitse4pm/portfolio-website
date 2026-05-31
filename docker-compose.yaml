@@ -1,9 +1,19 @@
 services:
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - internal
   database:
     image: mysql:8.0
     container_name: database
-    ports:
-      - 3306:3306
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_DATABASE_PASSWORD:?Set MYSQL_DATABASE_PASSWORD in your environment}
       MYSQL_DATABASE: ${MYSQL_DATABASE_NAME:-Portfolio}
@@ -40,8 +50,6 @@ services:
     build:
       context: ./backend/StefanSpitse
       dockerfile: Dockerfile
-    ports:
-      - "8000:80"
     environment:
       ALEMBIC_URI: ${ALEMBIC_URI}
       MYSQL_DATABASE_URI: ${MYSQL_DATABASE_URI}
@@ -62,9 +70,7 @@ services:
       context: ./frontend/StefanSpitse
       dockerfile: Dockerfile
       args:
-        VITE_API_URL: http://192.168.2.9:8000   
-    ports:
-      - "80:80"         
+        - VITE_API_URL=${BACKEND_URL}
     networks:
       - internal
 

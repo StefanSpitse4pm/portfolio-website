@@ -94,6 +94,7 @@ def upgrade() -> None:
     )
     op.bulk_insert(users_table, [
         {'username': 'admin', 'hashed_password': '$2b$12$nn/SV5HKpgqYefgxP3EAb./C6NW3gC8110rryRnT1hxtO1kfSZ06K'},
+        {'username': 'visitor', 'hashed_password': '$2b$12$mRgizmPvnvECMkm4uR6cJe2WXcVIac1VcUjGLEdt0UJbfWjOripD.'},
     ])
     # ### end Alembic commands ###
 
