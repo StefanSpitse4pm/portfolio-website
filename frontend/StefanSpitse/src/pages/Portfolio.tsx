@@ -4,7 +4,7 @@ import type { PortfolioFile } from '../libs/types'
 import { useAuth } from '../libs/auth'
 
 const PORTFOLIO_STORAGE_KEY = 'stefan-portfolio-access'
-const PORTFOLIO_USERNAME = import.meta.env.VITE_PORTFOLIO_USERNAME ?? 'portfolio'
+const PORTFOLIO_USERNAME = import.meta.env.VITE_PORTFOLIO_USERNAME ?? 'visitor'
 
 const Portfolio = () => {
   const { token } = useAuth()
