@@ -19,7 +19,7 @@ UPLOAD_DIR = Path("uploads")
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 
 @router.post("/portfolio/upload-pdf/")
-async def upload_pdf(pdf: UploadFile, category:str | None = None, user: TokenData = Depends(authenticate), db = Depends(get_db_connection)):
+async def upload_pdf(pdf: UploadFile, display_name:str | None = None, category:str | None = None, user: TokenData = Depends(authenticate), db = Depends(get_db_connection)):
     extension = os.path.splitext(str(pdf.filename))[1]
     if extension not in [".pdf", ".docx"]:
         raise HTTPException(415)
@@ -30,7 +30,7 @@ async def upload_pdf(pdf: UploadFile, category:str | None = None, user: TokenDat
     with file_path.open("wb") as f:
         shutil.copyfileobj(pdf.file, f)
     
-    await execute(Insert(Files).values(file_path=file_path, file_name=pdf.filename), db, commit=True) 
+    await execute(Insert(Files).values(file_path=file_path,display_name=display_name, file_name=pdf.filename), db, commit=True) 
 
     file = await fetch_one(Select(Files).where(Files.file_path == file_path), db)
     if category is not None:

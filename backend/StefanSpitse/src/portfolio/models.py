@@ -7,6 +7,7 @@ class Files(Base):
     __tablename__ = "files"
     id = Column(Integer, primary_key=True, index=True)
     file_path = Column(String(512), unique=True, index=True)
+    display_name = Column(String(512))
     file_name = Column(String(512))
     file_categories = relationship("FileCategories", back_populates="file")
 
