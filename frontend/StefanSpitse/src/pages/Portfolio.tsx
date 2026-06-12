@@ -124,6 +124,9 @@ const Portfolio = () => {
       }
     }
   }
+	const formatFileName = (fileName: string) => {
+	  return fileName.replace(/\.[^/.]+$/, '').replace(/_/g, ' ')
+	}
 
   return (
     <section className="section">
@@ -193,7 +196,7 @@ const Portfolio = () => {
             {filteredFiles.map((file) => (
               <div key={file.id} className="list-item">
                 <div>
-                  <h3>{file.file_name}</h3>
+				  <h3>{formatFileName(file.file_name)}</h3>
                   <p className="muted">PDF document</p>
                 </div>
                 <button type="button" className="button primary" onClick={() => openFile(file.id)}>
